@@ -3,6 +3,55 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+ 
+
+   /* Dodger Blue */
+   --dodger_blue: #118ff8;
+   --dodger_blue-100: #021d33;
+   --dodger_blue-200: #033a67;
+   --dodger_blue-300: #05579a;
+   --dodger_blue-400: #0674ce;
+   --dodger_blue-500: #118ff8;
+   --dodger_blue-600: #41a6f9;
+   --dodger_blue-700: #71bcfb;
+   --dodger_blue-800: #a0d3fc;
+   --dodger_blue-900: #d0e9fe;
+ 
+   /* Alice Blue */
+   --alice_blue: #e5f3ff;
+   --alice_blue-100: #003461;
+   --alice_blue-200: #0067c2;
+   --alice_blue-300: #2499ff;
+   --alice_blue-400: #85c6ff;
+   --alice_blue-500: #e5f3ff;
+   --alice_blue-600: #ebf5ff;
+   --alice_blue-700: #f0f8ff;
+   --alice_blue-800: #f5faff;
+   --alice_blue-900: #fafdff;
+ 
+   /* Sunglow */
+   --sunglow: #fec93c;
+   --sunglow-100: #3f2e00;
+   --sunglow-200: #7e5c01;
+   --sunglow-300: #bd8b01;
+   --sunglow-400: #fcb901;
+   --sunglow-500: #fec93c;
+   --sunglow-600: #fed565;
+   --sunglow-700: #fee08b;
+   --sunglow-800: #ffeab2;
+   --sunglow-900: #fff5d8;
+ 
+   /* Black */
+   --black: #000000;
+   --black-100: #000000;
+   --black-200: #000000;
+   --black-300: #000000;
+   --black-400: #000000;
+   --black-500: #000000;
+   --black-600: #333333;
+   --black-700: #666666;
+   --black-800: #999999;
+   --black-900: #cccccc;
 }
 
 @theme inline {
@@ -10,6 +59,54 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Dodger Blue */
+  --color-dodger_blue: var(--dodger_blue);
+  --color-dodger_blue-100: var(--dodger_blue-100);
+  --color-dodger_blue-200: var(--dodger_blue-200);
+  --color-dodger_blue-300: var(--dodger_blue-300);
+  --color-dodger_blue-400: var(--dodger_blue-400);
+  --color-dodger_blue-500: var(--dodger_blue-500);
+  --color-dodger_blue-600: var(--dodger_blue-600);
+  --color-dodger_blue-700: var(--dodger_blue-700);
+  --color-dodger_blue-800: var(--dodger_blue-800);
+  --color-dodger_blue-900: var(--dodger_blue-900);
+
+  /* Alice Blue */
+  --color-alice_blue: var(--alice_blue);
+  --color-alice_blue-100: var(--alice_blue-100);
+  --color-alice_blue-200: var(--alice_blue-200);
+  --color-alice_blue-300: var(--alice_blue-300);
+  --color-alice_blue-400: var(--alice_blue-400);
+  --color-alice_blue-500: var(--alice_blue-500);
+  --color-alice_blue-600: var(--alice_blue-600);
+  --color-alice_blue-700: var(--alice_blue-700);
+  --color-alice_blue-800: var(--alice_blue-800);
+  --color-alice_blue-900: var(--alice_blue-900);
+
+  /* Sunglow */
+  --color-sunglow: var(--sunglow);
+  --color-sunglow-100: var(--sunglow-100);
+  --color-sunglow-200: var(--sunglow-200);
+  --color-sunglow-300: var(--sunglow-300);
+  --color-sunglow-400: var(--sunglow-400);
+  --color-sunglow-500: var(--sunglow-500);
+  --color-sunglow-600: var(--sunglow-600);
+  --color-sunglow-700: var(--sunglow-700);
+  --color-sunglow-800: var(--sunglow-800);
+  --color-sunglow-900: var(--sunglow-900);
+
+  /* Black */
+  --color-black: var(--black);
+  --color-black-100: var(--black-100);
+  --color-black-200: var(--black-200);
+  --color-black-300: var(--black-300);
+  --color-black-400: var(--black-400);
+  --color-black-500: var(--black-500);
+  --color-black-600: var(--black-600);
+  --color-black-700: var(--black-700);
+  --color-black-800: var(--black-800);
+  --color-black-900: var(--black-900);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,8 +116,15 @@
   }
 }
 
+
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-montserrat);
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter);
 }
