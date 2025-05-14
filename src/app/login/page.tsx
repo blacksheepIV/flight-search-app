@@ -1,4 +1,4 @@
-'use client' // only for App Router
+'use client'
 
 import { signIn } from 'next-auth/react'
 
