@@ -1,9 +1,9 @@
-import NextAuth from 'next-auth'
+import NextAuth, { AuthOptions } from 'next-auth'
 import GitHubProvider from 'next-auth/providers/github'
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db } from '@/db'
 
-const handler = NextAuth({
+export const authOptions: AuthOptions = {
   adapter: DrizzleAdapter(db),
   providers: [
     GitHubProvider({
@@ -16,6 +16,7 @@ const handler = NextAuth({
   pages: {
     signIn: '/login',
   },
-})
+}
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }
