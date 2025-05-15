@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Montserrat } from 'next/font/google'
 import './globals.css'
+import { ReactQueryProvider } from '@/app/context/ReactQueryProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -53,8 +54,9 @@ export default function RootLayout({
       />
       <meta name="apple-mobile-web-app-title" content="skysearch" />
       <link rel="manifest" href="/site.webmanifest" />
+
       <body className={`${inter.variable} ${montserrat.variable} antialiased`}>
-        {children}
+        <ReactQueryProvider>{children}</ReactQueryProvider>
       </body>
     </html>
   )
