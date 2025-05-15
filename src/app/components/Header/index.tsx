@@ -37,7 +37,7 @@ const Header = () => {
         <div className="flex justify-end items-center gap-2">
           <button
             className={clsx(
-              'font-medium transition-colors duration-300 text-dodger_blue-400 bg-white hover:text-dodger_blue p-1.5 rounded-sm cursor-pointer',
+              'font-normal transition-colors duration-300 text-black bg-white hover:text-dodger_blue-400 p-1.5 rounded-sm cursor-pointer',
               { 'bg-sunglow-600': isScrolled },
             )}
           >
@@ -45,8 +45,8 @@ const Header = () => {
           </button>
           <button
             className={clsx(
-              'font-medium transition-colors duration-300 p-1.5 rounded-sm text-dodger_blue-400 bg-white hover:text-dodger_blue cursor-pointer',
-              { 'bg-sunglow-600 ': isScrolled },
+              'font-normal transition-colors duration-300 p-1.5 rounded-sm text-black bg-white hover:text-dodger_blue-400 cursor-pointer',
+              { 'bg-sunglow-600': isScrolled },
             )}
           >
             signIn

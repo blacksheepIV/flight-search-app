@@ -11,29 +11,32 @@ import {
 const FlightSearchPanel: React.FC = () => {
   const [originQuery, setOriginQuery] = useState('')
   const [destinationQuery, setDestinationQuery] = useState('')
-  const [originResults, setOriginResults] = useState<any[]>([])
-  const [destinationResults, setDestinationResults] = useState<any[]>([])
-  const [showOriginDropdown, setShowOriginDropdown] = useState(false)
-  const [showDestinationDropdown, setShowDestinationDropdown] = useState(false)
+
+  // const [originResults] = useState<unknown[]>([])
+
+  // const [destinationResults] = useState<unknown[]>([])
+  // const [showOriginDropdown, setShowOriginDropdown] = useState(false)
+  // const [showDestinationDropdown, setShowDestinationDropdown] = useState(false)
 
   // Handle airport selection
-  const selectOrigin = (airport: any) => {
-    //setSearchParams(prev => ({ ...prev, origin: airport }));
-    setOriginQuery(`${airport.city} (${airport.code})`)
-    setShowOriginDropdown(false)
-  }
 
-  const selectDestination = (airport: any) => {
-    // setSearchParams(prev => ({ ...prev, destination: airport }));
-    setDestinationQuery(`${airport.city} (${airport.code})`)
-    setShowDestinationDropdown(false)
-  }
+  // const selectOrigin = (airport: any) => {
+  //   //setSearchParams(prev => ({ ...prev, origin: airport }));
+  //   setOriginQuery(`${airport.city} (${airport.code})`)
+  //   setShowOriginDropdown(false)
+  // }
+
+  // const selectDestination = (airport: any) => {
+  //   // setSearchParams(prev => ({ ...prev, destination: airport }));
+  //   setDestinationQuery(`${airport.city} (${airport.code})`)
+  //   setShowDestinationDropdown(false)
+  // }
 
   const swapLocations = () => {}
 
   const handleSearch = () => {}
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
+    <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 max-w-5xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex space-x-4">
           <button
@@ -64,14 +67,11 @@ const FlightSearchPanel: React.FC = () => {
                 type="text"
                 value={originQuery}
                 onChange={e => setOriginQuery(e.target.value)}
-                onFocus={() =>
-                  originQuery.length >= 2 && setShowOriginDropdown(true)
-                }
                 placeholder="City or airport"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            {showOriginDropdown && (
+            {/* {showOriginDropdown && (
               <div className="absolute w-full mt-1 bg-white rounded-lg shadow-lg z-10 max-h-72 overflow-y-auto">
                 {originResults.length > 0 ? (
                   originResults.map(airport => (
@@ -92,7 +92,7 @@ const FlightSearchPanel: React.FC = () => {
                   <div className="p-3 text-gray-500">No airports found</div>
                 )}
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Swap button */}
@@ -117,15 +117,11 @@ const FlightSearchPanel: React.FC = () => {
                 type="text"
                 value={destinationQuery}
                 onChange={e => setDestinationQuery(e.target.value)}
-                onFocus={() =>
-                  destinationQuery.length >= 2 &&
-                  setShowDestinationDropdown(true)
-                }
                 placeholder="City or airport"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            {showDestinationDropdown && (
+            {/* {showDestinationDropdown && (
               <div className="absolute w-full mt-1 bg-white rounded-lg shadow-lg z-10 max-h-72 overflow-y-auto">
                 {destinationResults.length > 0 ? (
                   destinationResults.map(airport => (
@@ -146,7 +142,7 @@ const FlightSearchPanel: React.FC = () => {
                   <div className="p-3 text-gray-500">No airports found</div>
                 )}
               </div>
-            )}
+            )} */}
           </div>
         </div>
 
