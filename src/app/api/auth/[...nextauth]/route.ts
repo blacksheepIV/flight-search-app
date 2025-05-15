@@ -3,7 +3,7 @@ import GitHubProvider from 'next-auth/providers/github'
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db } from '@/db'
 
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   adapter: DrizzleAdapter(db),
   providers: [
     GitHubProvider({
