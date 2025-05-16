@@ -12,6 +12,7 @@
     "@auth/drizzle-adapter": "^1.9.1",
     "@heroicons/react": "^2.2.0",
     "@tanstack/react-query": "^5.76.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
     "next": "15.3.2",

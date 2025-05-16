@@ -1,38 +1,8 @@
-import { GetLocationsResponse } from './types'
+import type { GetLocationsResponse } from './types'
+import { getAmadeusAccessToken } from '@/app/lib/api/amadeus'
+import { NextRequest, NextResponse } from 'next/server'
 
-let accessTokenCache: { token: string; expires: number } | null = null
-
-async function getAmadeusAccessToken() {
-  if (accessTokenCache && Date.now() < accessTokenCache.expires) {
-    return accessTokenCache.token
-  }
-
-  const res = await fetch(
-    'https://test.api.amadeus.com/v1/security/oauth2/token',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        grant_type: 'client_credentials',
-        client_id: process.env.AMADEUS_API_KEY!,
-        client_secret: process.env.AMADEUS_API_SECRET!,
-      }),
-    },
-  )
-
-  const data = await res.json()
-
-  if (!res.ok) throw new Error('Failed to get Amadeus access token')
-
-  accessTokenCache = {
-    token: data.access_token,
-    expires: Date.now() + data.expires_in * 1000,
-  }
-
-  return data.access_token
-}
-
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const keyword = searchParams.get('keyword')
 
@@ -61,5 +31,5 @@ export async function GET(request: Request) {
     subType: item.subType,
   }))
 
-  return Response.json(cities)
+  return NextResponse.json(cities, { status: res.status })
 }

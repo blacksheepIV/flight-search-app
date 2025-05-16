@@ -21,7 +21,7 @@ const LocationInput = ({ value, onChange }: Props) => {
 
     return data.map((location: Location) => ({
       ...location,
-      label: `${location.name} (${location.iataCode})`,
+      label: `${location.name}-(${location.iataCode})`,
       value: location.iataCode,
     }))
   }

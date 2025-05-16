@@ -27,13 +27,13 @@ const FlightSearchPanel: React.FC = () => {
         <div className="flex space-x-4">
           <button
             type="button"
-            className={`px-4 py-2 rounded-full font-medium transition-colors duration-200`}
+            className={`px-4 py-2 rounded-full font-medium bg-dodger_blue-600 transition-colors duration-200 cursor-pointer`}
           >
             Round Trip
           </button>
           <button
             type="button"
-            className={`px-4 py-2 rounded-full font-medium transition-colors duration-200`}
+            className={`px-4 py-2 rounded-full font-medium border-2 border-dodger_blue-600 text-black transition-colors  duration-200 cursor-pointer`}
           >
             One Way
           </button>
@@ -63,7 +63,7 @@ const FlightSearchPanel: React.FC = () => {
               onClick={swapLocations}
               className="p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
             >
-              <ArrowsRightLeftIcon className="text-blue-600 w-[20px] h-[20px]" />
+              <ArrowsRightLeftIcon className="text-dodger_blue w-[20px] h-[20px]" />
             </button>
           </div>
 
