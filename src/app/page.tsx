@@ -17,9 +17,9 @@ export default async function Home() {
   return (
     <main className="bg-white w-full min-h-screen flex flex-col">
       <Header />
-      <div className="my-5 mx-auto">
+      <div className="px-1 pb-[282px] md:my-5 mx-auto ">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-dodger_blue-400 mb-2">
+          <h1 className="text-3xl font-bold text-alice_blue-100 mb-2">
             Find your next flight
           </h1>
           <p className="text-gray-600">

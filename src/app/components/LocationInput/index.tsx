@@ -42,6 +42,7 @@ const LocationInput = ({ value, onChange }: Props) => {
         defaultOptions={false}
         loadOptions={loadOptions}
         onChange={onChange}
+        isClearable
         value={
           value
             ? {
