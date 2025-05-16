@@ -1,26 +1,45 @@
 'use client'
 import React from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, useWatch } from 'react-hook-form'
+
 import type { FlightSearchForm } from './types'
 
-import {
-  CalendarIcon,
-  ArrowsRightLeftIcon,
-  UsersIcon,
-} from '@heroicons/react/24/outline'
+import { ArrowsRightLeftIcon, UsersIcon } from '@heroicons/react/24/outline'
 import LocationInput from '@/app/components/LocationInput'
+import clsx from 'clsx'
+import DatePicker from '@/app/components/DatePicker'
 
 const FlightSearchPanel: React.FC = () => {
-  const { handleSubmit, control } = useForm<FlightSearchForm>()
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm<FlightSearchForm>({
+    defaultValues: {
+      departureDate: new Date(),
+      returnDate: new Date(),
+      passengers: 1,
+    },
+  })
+
+  const originQuery = useWatch({ control, name: 'originQuery' })
+  const destinationQuery = useWatch({ control, name: 'destinationQuery' })
+
+  const isSwapDisabled = !originQuery || !destinationQuery
 
   const onSubmit = (data: FlightSearchForm) => {
-    console.log('Selected origin:', data.originQuery)
-    console.log('Selected dest:', data.destinationQuery)
+    console.log('Form Data:', data)
   }
 
-  const swapLocations = () => {}
+  const swapLocations = () => {
+    const origin = getValues('originQuery')
+    const destination = getValues('destinationQuery')
+    setValue('originQuery', destination)
+    setValue('destinationQuery', origin)
+  }
 
-  //const handleSearch = () => {}
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 max-w-5xl">
       <div className="flex items-center justify-between mb-6">
@@ -50,8 +69,16 @@ const FlightSearchPanel: React.FC = () => {
             <Controller
               name="originQuery"
               control={control}
+              rules={{ required: 'Origin is required' }}
               render={({ field }) => (
-                <LocationInput value={field.value} onChange={field.onChange} />
+                <>
+                  <LocationInput {...field} />
+                  {errors.originQuery && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.originQuery.message}
+                    </p>
+                  )}
+                </>
               )}
             />
           </div>
@@ -60,10 +87,28 @@ const FlightSearchPanel: React.FC = () => {
           <div className="md:col-span-2 flex items-center justify-center">
             <button
               type="button"
+              disabled={isSwapDisabled}
               onClick={swapLocations}
-              className="p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
+              className={clsx(
+                'p-2 rounded-full ',
+                {
+                  'bg-blue-50 hover:bg-blue-100 transition-colors duration-200':
+                    !isSwapDisabled,
+                },
+                {
+                  'cursor-not-allowed bg-gray-200': isSwapDisabled,
+                },
+              )}
             >
-              <ArrowsRightLeftIcon className="text-dodger_blue w-[20px] h-[20px]" />
+              <ArrowsRightLeftIcon
+                className={clsx(
+                  ' w-[20px] h-[20px]',
+                  { 'text-dodger_blue': !isSwapDisabled },
+                  {
+                    'text-black-200': isSwapDisabled,
+                  },
+                )}
+              />
             </button>
           </div>
 
@@ -75,8 +120,19 @@ const FlightSearchPanel: React.FC = () => {
             <Controller
               name="destinationQuery"
               control={control}
+              rules={{ required: 'Destination is required' }}
               render={({ field }) => (
-                <LocationInput value={field.value} onChange={field.onChange} />
+                <>
+                  <LocationInput
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                  {errors.destinationQuery && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.destinationQuery.message}
+                    </p>
+                  )}
+                </>
               )}
             />
           </div>
@@ -88,28 +144,23 @@ const FlightSearchPanel: React.FC = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Departure
             </label>
-            <div className="relative">
-              <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-[18px] h-[18px]" />
-              <input
-                type="date"
-                min={new Date().toISOString().split('T')[0]}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          {/* Return Date */}
-          <div className="md:col-span-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Return
-            </label>
-            <div className="relative">
-              <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-[18px] h-[18px]" />
-              <input
-                type="date"
-                className={`w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              />
-            </div>
+            <Controller
+              name="departureDate"
+              control={control}
+              rules={{ required: 'Departure date is required' }}
+              render={({ field }) => (
+                <DatePicker
+                  showRange={true}
+                  disablePast
+                  onChange={field.onChange}
+                />
+              )}
+            />
+            {errors.departureDate && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.departureDate.message}
+              </p>
+            )}
           </div>
 
           {/* Passengers */}
@@ -148,8 +199,7 @@ const FlightSearchPanel: React.FC = () => {
         {/* Search Button */}
         <button
           type="submit"
-          disabled={true}
-          className={`w-full py-3 rounded-lg font-semibold`}
+          className={`w-full py-3 rounded-lg font-semibold bg-alice_blue-100 text-white`}
         >
           {/* {isLoading ? 'Searching...' : 'Search Flights'} */}
           Search Flights

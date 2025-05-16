@@ -1,0 +1,68 @@
+.react-calendar {
+  width: 350px;
+  max-width: 100%;
+  background: white;
+  border-radius: 0.5rem;
+  border: none !important;
+  font-family: inherit;
+}
+
+.react-calendar__tile {
+  padding: 0.75rem 0.5rem;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #e5edff;
+  border-radius: 0.375rem;
+}
+
+.react-calendar__tile--now {
+  background: var(--color-sunglow) !important;
+  color: black !important;
+  border-radius: 0.375rem !important; 
+ 
+}
+
+.react-calendar__tile--now:not(.react-calendar__tile--active):not(.react-calendar__tile--rangeStart):not(.react-calendar__tile--rangeEnd):not(.react-calendar__tile--rangeBothEnds) {
+  background: inherit !important;
+  color: inherit !important;
+}
+
+.react-calendar__tile--active {
+  background: var(--color-alice_blue)!important;
+  border-radius: 0;
+  color: white;
+}
+.react-calendar__tile--rangeStart {
+  background: var(--color-alice_blue-500) !important;
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+/* Last day of range */
+.react-calendar__tile--rangeEnd {
+  background: var(--color-alice_blue-500) !important;
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+
+/* If only one day is selected (start == end) */
+.react-calendar__tile--rangeStart.react-calendar__tile--rangeEnd {
+  background: var(--color-alice_blue) !important;
+  border-radius: 0.375rem;
+}
+
+
+
+.react-calendar__tile:disabled {
+  background-color: #f3f4f6 !important;
+  color: #9ca3af !important;
+}
+
+.react-calendar__navigation button:disabled {
+  background-color: #f3f4f6;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #e5edff;
+}
