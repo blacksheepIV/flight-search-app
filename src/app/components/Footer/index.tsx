@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0 text-left">
-            <h3 className="text-lg font-semibold text-alice_blue-400 text-center md:text-left">
+            <h3 className="text-lg font-semibold text-dodger_blue-500 text-center md:text-left">
               SkySearch
             </h3>
             <p className="text-sm text-black-600">Find your perfect flight</p>

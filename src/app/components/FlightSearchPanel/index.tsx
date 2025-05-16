@@ -1,98 +1,59 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm, Controller } from 'react-hook-form'
+import type { FlightSearchForm } from './types'
 
 import {
-  MapPinIcon,
   CalendarIcon,
   ArrowsRightLeftIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
+import LocationInput from '@/app/components/LocationInput'
 
 const FlightSearchPanel: React.FC = () => {
-  const [originQuery, setOriginQuery] = useState('')
-  const [destinationQuery, setDestinationQuery] = useState('')
+  const { handleSubmit, control } = useForm<FlightSearchForm>()
 
-  // const [originResults] = useState<unknown[]>([])
-
-  // const [destinationResults] = useState<unknown[]>([])
-  // const [showOriginDropdown, setShowOriginDropdown] = useState(false)
-  // const [showDestinationDropdown, setShowDestinationDropdown] = useState(false)
-
-  // Handle airport selection
-
-  // const selectOrigin = (airport: any) => {
-  //   //setSearchParams(prev => ({ ...prev, origin: airport }));
-  //   setOriginQuery(`${airport.city} (${airport.code})`)
-  //   setShowOriginDropdown(false)
-  // }
-
-  // const selectDestination = (airport: any) => {
-  //   // setSearchParams(prev => ({ ...prev, destination: airport }));
-  //   setDestinationQuery(`${airport.city} (${airport.code})`)
-  //   setShowDestinationDropdown(false)
-  // }
+  const onSubmit = (data: FlightSearchForm) => {
+    console.log('Selected origin:', data.originQuery)
+    console.log('Selected dest:', data.destinationQuery)
+  }
 
   const swapLocations = () => {}
 
-  const handleSearch = () => {}
+  //const handleSearch = () => {}
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 max-w-5xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex space-x-4">
           <button
             type="button"
-            className={`px-4 py-2 rounded-full font-medium transition-colors duration-200`}
+            className={`px-4 py-2 rounded-full font-medium bg-dodger_blue-600 transition-colors duration-200 cursor-pointer`}
           >
             Round Trip
           </button>
           <button
             type="button"
-            className={`px-4 py-2 rounded-full font-medium transition-colors duration-200`}
+            className={`px-4 py-2 rounded-full font-medium border-2 border-dodger_blue-600 text-black transition-colors  duration-200 cursor-pointer`}
           >
             One Way
           </button>
         </div>
       </div>
 
-      <form onSubmit={handleSearch}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end mb-6">
           {/* Origin */}
           <div className="md:col-span-5 relative">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               From
             </label>
-            <div className="relative">
-              <MapPinIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-[18px] h-[18px]" />
-              <input
-                type="text"
-                value={originQuery}
-                onChange={e => setOriginQuery(e.target.value)}
-                placeholder="City or airport"
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            {/* {showOriginDropdown && (
-              <div className="absolute w-full mt-1 bg-white rounded-lg shadow-lg z-10 max-h-72 overflow-y-auto">
-                {originResults.length > 0 ? (
-                  originResults.map(airport => (
-                    <div
-                      key={airport?.code}
-                      className="p-3 hover:bg-gray-50 cursor-pointer"
-                      onClick={() => selectOrigin(airport)}
-                    >
-                      <div className="font-medium">
-                        {airport?.city} ({airport?.code})
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {airport?.name}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="p-3 text-gray-500">No airports found</div>
-                )}
-              </div>
-            )} */}
+            <Controller
+              name="originQuery"
+              control={control}
+              render={({ field }) => (
+                <LocationInput value={field.value} onChange={field.onChange} />
+              )}
+            />
           </div>
 
           {/* Swap button */}
@@ -102,7 +63,7 @@ const FlightSearchPanel: React.FC = () => {
               onClick={swapLocations}
               className="p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
             >
-              <ArrowsRightLeftIcon className="text-blue-600 w-[20px] h-[20px]" />
+              <ArrowsRightLeftIcon className="text-dodger_blue w-[20px] h-[20px]" />
             </button>
           </div>
 
@@ -111,38 +72,13 @@ const FlightSearchPanel: React.FC = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               To
             </label>
-            <div className="relative">
-              <MapPinIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-[18px] h-[18px]" />
-              <input
-                type="text"
-                value={destinationQuery}
-                onChange={e => setDestinationQuery(e.target.value)}
-                placeholder="City or airport"
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            {/* {showDestinationDropdown && (
-              <div className="absolute w-full mt-1 bg-white rounded-lg shadow-lg z-10 max-h-72 overflow-y-auto">
-                {destinationResults.length > 0 ? (
-                  destinationResults.map(airport => (
-                    <div
-                      key={airport.code}
-                      className="p-3 hover:bg-gray-50 cursor-pointer"
-                      onClick={() => selectDestination(airport)}
-                    >
-                      <div className="font-medium">
-                        {airport.city} ({airport.code})
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {airport.name}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="p-3 text-gray-500">No airports found</div>
-                )}
-              </div>
-            )} */}
+            <Controller
+              name="destinationQuery"
+              control={control}
+              render={({ field }) => (
+                <LocationInput value={field.value} onChange={field.onChange} />
+              )}
+            />
           </div>
         </div>
 

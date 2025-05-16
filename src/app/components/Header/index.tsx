@@ -37,8 +37,8 @@ const Header = () => {
         <div className="flex justify-end items-center gap-2">
           <button
             className={clsx(
-              'font-normal transition-colors duration-300 text-black bg-white hover:text-dodger_blue-400 p-1.5 rounded-sm cursor-pointer',
-              { 'bg-sunglow-600': isScrolled },
+              'font-normal transition-colors duration-300 text-black bg-sunglow-500 hover:text-white p-1.5 rounded-sm cursor-pointer',
+              { 'bg-white': isScrolled },
             )}
           >
             Register
