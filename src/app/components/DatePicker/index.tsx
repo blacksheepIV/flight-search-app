@@ -66,7 +66,7 @@ function DatePicker({
       <input
         type="text"
         readOnly
-        className="w-full h-[50px] pl-[35px] border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 p-1"
+        className="w-full h-[36px] pl-[35px] border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 p-1"
         value={inputValue}
         placeholder="Select date"
         onClick={handleInputClick}

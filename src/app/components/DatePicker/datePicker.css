@@ -35,13 +35,13 @@
   color: white;
 }
 .react-calendar__tile--rangeStart {
-  background: var(--color-alice_blue-500) !important;
+  background: var(--color-alice_blue-100) !important;
   border-radius: 0.375rem 0 0 0.375rem;
 }
 
 /* Last day of range */
 .react-calendar__tile--rangeEnd {
-  background: var(--color-alice_blue-500) !important;
+  background: var(--color-alice_blue-100) !important;
   border-radius: 0 0.375rem 0.375rem 0;
 }
 

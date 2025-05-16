@@ -1,27 +1,31 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm, Controller, useWatch } from 'react-hook-form'
 
 import type { FlightSearchForm } from './types'
 
-import { ArrowsRightLeftIcon, UsersIcon } from '@heroicons/react/24/outline'
+import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import LocationInput from '@/app/components/LocationInput'
 import clsx from 'clsx'
 import DatePicker from '@/app/components/DatePicker'
+import PassangersSelect from '@/app/components/PassangerSelect'
 
 const FlightSearchPanel: React.FC = () => {
+  const [isRoundTrip, setIsRoundTrip] = useState(true)
+
   const {
     handleSubmit,
     control,
     setValue,
     getValues,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FlightSearchForm>({
     defaultValues: {
       departureDate: new Date(),
       returnDate: new Date(),
       passengers: 1,
     },
+    mode: 'onChange',
   })
 
   const originQuery = useWatch({ control, name: 'originQuery' })
@@ -46,13 +50,25 @@ const FlightSearchPanel: React.FC = () => {
         <div className="flex space-x-4">
           <button
             type="button"
-            className={`px-4 py-2 rounded-full font-medium bg-dodger_blue-600 transition-colors duration-200 cursor-pointer`}
+            className={clsx(
+              'px-4 py-2 rounded-full font-medium transition-colors duration-200',
+              isRoundTrip
+                ? 'bg-dodger_blue-600 text-white'
+                : 'border-2 border-dodger_blue-600 text-black',
+            )}
+            onClick={() => setIsRoundTrip(true)}
           >
             Round Trip
           </button>
           <button
             type="button"
-            className={`px-4 py-2 rounded-full font-medium border-2 border-dodger_blue-600 text-black transition-colors  duration-200 cursor-pointer`}
+            className={clsx(
+              'px-4 py-2 rounded-full font-medium transition-colors duration-200',
+              !isRoundTrip
+                ? 'bg-dodger_blue-600 text-white'
+                : 'border-2 border-dodger_blue-600 text-black',
+            )}
+            onClick={() => setIsRoundTrip(false)}
           >
             One Way
           </button>
@@ -60,9 +76,9 @@ const FlightSearchPanel: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end mb-6 md:h-[80px] max-h[80px]">
           {/* Origin */}
-          <div className="md:col-span-5 relative">
+          <div className="md:col-span-5 relative self-end">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               From
             </label>
@@ -84,7 +100,7 @@ const FlightSearchPanel: React.FC = () => {
           </div>
 
           {/* Swap button */}
-          <div className="md:col-span-2 flex items-center justify-center">
+          <div className="md:col-span-2 flex items-center justify-center self-end">
             <button
               type="button"
               disabled={isSwapDisabled}
@@ -113,7 +129,7 @@ const FlightSearchPanel: React.FC = () => {
           </div>
 
           {/* Destination */}
-          <div className="md:col-span-5 relative">
+          <div className="md:col-span-5 relative self-end">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               To
             </label>
@@ -138,19 +154,19 @@ const FlightSearchPanel: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6 md:h-[80px] max-h[80px]">
           {/* Departure Date */}
-          <div className="md:col-span-4">
+          <div className="md:col-span-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Departure
+              {isRoundTrip ? 'Departure - Return' : 'Departure'}
             </label>
             <Controller
               name="departureDate"
               control={control}
-              rules={{ required: 'Departure date is required' }}
+              rules={{ required: 'Date is required' }}
               render={({ field }) => (
                 <DatePicker
-                  showRange={true}
+                  showRange={isRoundTrip}
                   disablePast
                   onChange={field.onChange}
                 />
@@ -162,36 +178,29 @@ const FlightSearchPanel: React.FC = () => {
               </p>
             )}
           </div>
-
           {/* Passengers */}
-          <div className="md:col-span-4">
+          <div className="md:col-span-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Passengers
             </label>
             <div className="relative">
-              <UsersIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-[18px] h-[18px]" />
-              <select className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
-                  <option key={num} value={num}>
-                    {num} {num === 1 ? 'Passenger' : 'Passengers'}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <svg
-                  className="h-5 w-5 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
+              <Controller
+                name="passengers"
+                control={control}
+                rules={{ required: 'Please select number of passengers' }}
+                render={({ field }) => (
+                  <PassangersSelect
+                    {...field}
+                    onChange={field.onChange}
+                    value={field.value}
                   />
-                </svg>
-              </div>
+                )}
+              />
+              {errors.passengers && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.passengers.message}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -199,7 +208,11 @@ const FlightSearchPanel: React.FC = () => {
         {/* Search Button */}
         <button
           type="submit"
-          className={`w-full py-3 rounded-lg font-semibold bg-alice_blue-100 text-white`}
+          disabled={!isValid}
+          className={clsx(
+            `w-full py-3 rounded-lg font-semibold bg-alice_blue-100 text-white`,
+            !isValid ? 'cursor-not-allowed bg-opacity-20' : 'cursor-pointer',
+          )}
         >
           {/* {isLoading ? 'Searching...' : 'Search Flights'} */}
           Search Flights
