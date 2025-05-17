@@ -1,12 +1,12 @@
 import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
+import FlightSearchSection from '@/app/features/flight-search/FlightSearchSection'
 //import { getServerSession } from 'next-auth'
 
 //import { redirect } from 'next/navigation'
 //import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 //import Image from "next/image";
-import FlightSearchPanel from '@/app/components/FlightSearchPanel/index'
 
 export default async function Home() {
   // const session = await getServerSession(authOptions)
@@ -26,7 +26,7 @@ export default async function Home() {
             Search, compare, and book flights from hundreds of airlines
           </p>
         </div>
-        <FlightSearchPanel />
+        <FlightSearchSection />
       </div>
       <Footer />
     </main>

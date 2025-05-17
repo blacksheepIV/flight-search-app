@@ -9,9 +9,29 @@ import LocationInput from '@/app/components/LocationInput'
 import clsx from 'clsx'
 import DatePicker from '@/app/components/DatePicker'
 import PassangersSelect from '@/app/components/PassangerSelect'
+import { useFlightsMutation } from '@/app/hooks/api/useFlightsSearch'
+import { format } from 'date-fns'
+import { FlightSearchParams } from '@/app/lib/api/searchFlights'
+import { useFlightsInfo } from '@/app/features/flight-search/contexts/FlightContext'
 
 const FlightSearchPanel: React.FC = () => {
   const [isRoundTrip, setIsRoundTrip] = useState(true)
+  const { setResults, setIsLoading, setHasSearched, setSearchParams } =
+    useFlightsInfo()
+
+  const { mutate: lookUpFlights, isPending } = useFlightsMutation({
+    onSuccess: data => {
+      setResults(data.data)
+      setIsLoading(false)
+      setHasSearched(true)
+    },
+    onError: error => {
+      console.error('Flight search failed:', error.message)
+      setResults([])
+      setIsLoading(false)
+      setHasSearched(true)
+    },
+  })
 
   const {
     handleSubmit,
@@ -34,7 +54,31 @@ const FlightSearchPanel: React.FC = () => {
   const isSwapDisabled = !originQuery || !destinationQuery
 
   const onSubmit = (data: FlightSearchForm) => {
-    console.log('Form Data:', data)
+    setIsLoading(true)
+    let departureDate: string | null = null
+    let returnDate: string | null = null
+
+    if (Array.isArray(data.departureDate) && isRoundTrip) {
+      departureDate = format(data.departureDate[0], 'yyyy-MM-dd')
+      returnDate = format(data.departureDate[1], 'yyyy-MM-dd')
+    }
+
+    const formattedData: FlightSearchParams = {
+      origin: data.originQuery.iataCode,
+      destination: data.destinationQuery.iataCode,
+      adults: data.passengers,
+      departureDate: departureDate as string,
+      ...(returnDate && { returnDate }),
+    }
+    setSearchParams({
+      isRoundTrip,
+      origin: data.originQuery,
+      destination: data.destinationQuery,
+      passengers: data.passengers,
+      departureDate: departureDate as string,
+      ...(returnDate && { returnDate }),
+    })
+    lookUpFlights(formattedData)
   }
 
   const swapLocations = () => {
@@ -212,10 +256,10 @@ const FlightSearchPanel: React.FC = () => {
           className={clsx(
             `w-full py-3 rounded-lg font-semibold bg-alice_blue-100 text-white`,
             !isValid ? 'cursor-not-allowed bg-opacity-20' : 'cursor-pointer',
+            { 'cursor-not-allowed': isPending },
           )}
         >
-          {/* {isLoading ? 'Searching...' : 'Search Flights'} */}
-          Search Flights
+          {isPending ? 'Searching...' : 'Search Flights'}
         </button>
       </form>
     </div>

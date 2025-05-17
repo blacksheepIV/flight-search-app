@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline'
 import type { Flight } from '@/app/api/search-flights/types'
 import { format, intervalToDuration } from 'date-fns'
+import Image from 'next/image'
 
 interface FlightCardProps {
   flight: Flight
@@ -47,7 +48,16 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
           {/* Airline */}
           <div className="flex items-center mb-4 md:mb-0">
             {/* Airline logo missing in API response */}
-            {/* <img src={...} alt={...} className="w-8 h-8 object-contain mr-3" /> */}
+            <div className="w-8 h-8  mr-3">
+              <Image
+                src={`https://content.airhex.com/content/logos/airlines_${flight.validatingAirlineCodes[0]}_350_100_r.png`}
+                alt={flight.validatingAirlineCodes[0]}
+                width={350}
+                height={100}
+                objectFit="contain"
+              />
+            </div>
+
             <div>
               <span className="font-medium">
                 {/* Airline name comes from carrierCode; lookup required */}
