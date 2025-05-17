@@ -73,7 +73,7 @@ const FlightsListing: React.FC = () => {
           </div>
         </div>
         <div className="text-sm text-gray-600">
-          {filtered.length} {results.length === 1 ? 'flight' : 'flights'} found
+          {results.length} {results.length === 1 ? 'flight' : 'flights'} found
           {searchParams.passengers > 1 && (
             <span> · {searchParams.passengers} passengers</span>
           )}
