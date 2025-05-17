@@ -1,8 +1,16 @@
 'use client'
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react'
 import type { Flight } from '@/app/api/search-flights/types.ts'
 
 import { Location } from '@/app/api/locations/types'
+
+import { sortFlights, filterFlights } from '@/app/utils/flightUtils'
 
 interface SearchParams {
   origin: Location | null
@@ -11,6 +19,11 @@ interface SearchParams {
   returnDate?: string
   isRoundTrip: boolean
   passengers: number
+}
+
+export type FilterOptions = {
+  priceRange: [number, number]
+  departureWindow: [number, number] // minutes from midnight (e.g. [360, 720] for 6:00 AM to 12:00 PM)
 }
 
 interface FlightContextValue {
@@ -24,6 +37,10 @@ interface FlightContextValue {
   setSearchParams: (params: SearchParams) => void
   filteredFlights: Flight[]
   setFilteredFlights: (flights: Flight[]) => void
+  filterOptions: FilterOptions
+  setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions>>
+  sortOption: string
+  setSortOption: (val: string) => void
 }
 
 const FlightContext = createContext<FlightContextValue | undefined>(undefined)
@@ -41,6 +58,21 @@ export function FlightSearchProvider({ children }: { children: ReactNode }) {
     isRoundTrip: true,
     passengers: 1,
   })
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+    priceRange: [0, 1000],
+    departureWindow: [0, 23],
+  })
+
+  const [sortOption, setSortOption] = useState('')
+
+  useEffect(() => {
+    if (results.length > 0) {
+      const filtered = filterFlights(results, filterOptions)
+      const sorted = sortFlights(filtered, sortOption)
+
+      setFilteredFlights(sorted)
+    }
+  }, [results, filterOptions, sortOption])
 
   return (
     <FlightContext.Provider
@@ -55,6 +87,10 @@ export function FlightSearchProvider({ children }: { children: ReactNode }) {
         setSearchParams,
         filteredFlights,
         setFilteredFlights,
+        filterOptions,
+        setFilterOptions,
+        sortOption,
+        setSortOption,
       }}
     >
       {children}

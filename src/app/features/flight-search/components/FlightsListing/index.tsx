@@ -7,9 +7,10 @@ import {
   CalendarIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline'
+import FilterSection from '../FilterSection'
 
 const FlightsListing: React.FC = () => {
-  const { results, isLoading, hasSearched, searchParams } = useFlightsInfo()
+  const { results, isLoading, hasSearched, searchParams } = useFlightsInfo() //TODO: should load from filteredFlights
 
   if (isLoading) {
     return (
@@ -54,7 +55,7 @@ const FlightsListing: React.FC = () => {
       <div className="bg-gray-100 p-4 rounded-lg mb-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-2">
           <div className="flex items-center mb-2 md:mb-0">
-            <MapPinIcon className="text-blue-600 mr-2 w-[18px] h-[18px]" />
+            <MapPinIcon className="text-alice_blue-300 mr-2 w-[18px] h-[18px]" />
             <span className="text-lg font-medium">
               {searchParams.origin?.name} ({searchParams.origin?.iataCode}) to{' '}
               {searchParams.destination?.name} (
@@ -62,7 +63,7 @@ const FlightsListing: React.FC = () => {
             </span>
           </div>
           <div className="flex items-center">
-            <CalendarIcon className="text-blue-600 mr-2 w-[18px] h-[18px]" />
+            <CalendarIcon className="text-alice_blue-300 mr-2 w-[18px] h-[18px]" />
             <span>
               {searchParams.departureDate}
               {searchParams.isRoundTrip && searchParams.returnDate && (
@@ -72,7 +73,7 @@ const FlightsListing: React.FC = () => {
           </div>
         </div>
         <div className="text-sm text-gray-600">
-          {results.length} {results.length === 1 ? 'flight' : 'flights'} found
+          {filtered.length} {results.length === 1 ? 'flight' : 'flights'} found
           {searchParams.passengers > 1 && (
             <span> · {searchParams.passengers} passengers</span>
           )}
@@ -80,7 +81,7 @@ const FlightsListing: React.FC = () => {
       </div>
 
       {/* Filters */}
-      {/* <FilterPanel /> */}
+      <FilterSection />
 
       {/* Flight list */}
       <div className="space-y-4">
