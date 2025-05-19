@@ -16,8 +16,14 @@ import { useFlightsInfo } from '@/app/features/flight-search/contexts/FlightCont
 
 const FlightSearchPanel: React.FC = () => {
   const [isRoundTrip, setIsRoundTrip] = useState(true)
-  const { setResults, setIsLoading, setHasSearched, setSearchParams } =
-    useFlightsInfo()
+  const {
+    setResults,
+    setIsLoading,
+    setHasSearched,
+    setSearchParams,
+    reset,
+    results,
+  } = useFlightsInfo()
 
   const { mutate: lookUpFlights, isPending } = useFlightsMutation({
     onSuccess: data => {
@@ -54,6 +60,9 @@ const FlightSearchPanel: React.FC = () => {
   const isSwapDisabled = !originQuery || !destinationQuery
 
   const onSubmit = (data: FlightSearchForm) => {
+    if (results.length > 0) {
+      reset()
+    }
     setIsLoading(true)
     let departureDate: string | null = null
     let returnDate: string | null = null
