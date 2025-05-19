@@ -1,5 +1,8 @@
 'use client'
 import React, { useState } from 'react'
+import { setHours, startOfDay, format } from 'date-fns'
+import Slider from 'rc-slider'
+
 import {
   FunnelIcon,
   ChevronDownIcon,
@@ -57,12 +60,9 @@ const FilterSection: React.FC = () => {
     setSortOption(value)
   }
 
-  const formatTime = (minutes: number) => {
-    const hrs = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    return `${hrs.toString().padStart(2, '0')}:${mins
-      .toString()
-      .padStart(2, '0')}`
+  const formatHour = (hour: number): string => {
+    const date = setHours(startOfDay(new Date()), hour)
+    return format(date, 'HH:mm')
   }
 
   const formatPrice = (price: number) => `$${price}`
@@ -119,31 +119,21 @@ const FilterSection: React.FC = () => {
                 <span>{formatPrice(filterOptions.priceRange[0])}</span>
                 <span>{formatPrice(filterOptions.priceRange[1])}</span>
               </div>
-              <input
-                type="range"
+              <Slider
+                range
                 min={minPrice}
                 max={maxPrice}
-                value={filterOptions.priceRange[0]}
-                onChange={e =>
-                  handlePriceChange([
-                    parseInt(e.target.value),
-                    filterOptions.priceRange[1],
-                  ])
+                value={filterOptions.priceRange}
+                onChange={(values: number | number[]) =>
+                  handlePriceChange(values as [number, number])
                 }
-                className="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer"
-              />
-              <input
-                type="range"
-                min={minPrice}
-                max={maxPrice}
-                value={filterOptions.priceRange[1]}
-                onChange={e =>
-                  handlePriceChange([
-                    filterOptions.priceRange[0],
-                    parseInt(e.target.value),
-                  ])
-                }
-                className="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer"
+                allowCross={false}
+                step={1}
+                styles={{
+                  rail: { backgroundColor: '#bfdbfe', height: 6 },
+                  handle: { borderColor: '#3b82f6', backgroundColor: 'white' },
+                  track: { backgroundColor: '#3b82f6', height: 6 },
+                }}
               />
             </div>
           </div>
@@ -153,36 +143,24 @@ const FilterSection: React.FC = () => {
             <h3 className="font-medium mb-3">Departure Time Window</h3>
             <div className="space-y-2">
               <div className="flex justify-between text-sm text-gray-600">
-                <span>{formatTime(filterOptions.departureWindow[0])}</span>
-                <span>{formatTime(filterOptions.departureWindow[1])}</span>
+                <span>{formatHour(filterOptions.departureWindow[0])}</span>
+                <span>{formatHour(filterOptions.departureWindow[1])}</span>
               </div>
-              <input
-                type="range"
+              <Slider
+                range
                 min={0}
                 max={1440}
                 step={15}
-                value={filterOptions.departureWindow[0]}
-                onChange={e =>
-                  handleDepartureTimeChange([
-                    parseInt(e.target.value),
-                    filterOptions.departureWindow[1],
-                  ])
+                value={filterOptions.departureWindow}
+                onChange={(values: number | number[]) =>
+                  handleDepartureTimeChange(values as [number, number])
                 }
-                className="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer"
-              />
-              <input
-                type="range"
-                min={0}
-                max={1440}
-                step={15}
-                value={filterOptions.departureWindow[1]}
-                onChange={e =>
-                  handleDepartureTimeChange([
-                    filterOptions.departureWindow[0],
-                    parseInt(e.target.value),
-                  ])
-                }
-                className="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer"
+                allowCross={false}
+                styles={{
+                  rail: { backgroundColor: '#bfdbfe', height: 6 },
+                  handle: { borderColor: '#3b82f6', backgroundColor: 'white' },
+                  track: { backgroundColor: '#3b82f6', height: 6 },
+                }}
               />
             </div>
           </div>

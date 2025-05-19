@@ -8,8 +8,9 @@ import {
   ChevronUpIcon,
 } from '@heroicons/react/24/outline'
 import type { Flight } from '@/app/api/search-flights/types'
-import { format, intervalToDuration } from 'date-fns'
+import { format } from 'date-fns'
 import Image from 'next/image'
+import { formatDuration } from '@/app/utils/timeUtils'
 
 interface FlightCardProps {
   flight: Flight
@@ -26,20 +27,6 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
   const formatTime = (date: Date) => format(date, 'hh:mm a')
 
   const formatDate = (date: Date) => format(date, 'MMM d')
-
-  const formatISODuration = (isoDuration: string) => {
-    const start = new Date(0)
-    const end = new Date(0)
-    const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?/)
-    const hours = match?.[1] ? parseInt(match[1]) : 0
-    const minutes = match?.[2] ? parseInt(match[2]) : 0
-    end.setHours(hours)
-    end.setMinutes(minutes)
-    const duration = intervalToDuration({ start, end })
-    return `${duration.hours ? `${duration.hours}h ` : ''}${
-      duration.minutes ? `${duration.minutes}m` : ''
-    }`.trim()
-  }
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg mb-4">
@@ -87,7 +74,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
             {/* Duration & Stops */}
             <div className="flex flex-col items-center mx-8 mb-2 md:mb-0">
               <div className="text-xs text-gray-500 mb-1">
-                {formatISODuration(firstItinerary.duration)}
+                {formatDuration(firstItinerary.duration)}
               </div>
               <div className="relative w-24 md:w-32">
                 <div className="border-t-2 border-gray-300 absolute w-full top-1/2" />
@@ -165,7 +152,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
             <div>
               <h3 className="font-medium text-sm">Flight Duration</h3>
               <p className="text-gray-600">
-                {formatISODuration(firstItinerary.duration)}
+                {formatDuration(firstItinerary.duration)}
               </p>
             </div>
           </div>
@@ -197,7 +184,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
                       </p>
                       <p className="text-xs text-gray-500">
                         Layover:{' '}
-                        {formatISODuration(`PT${layoverDurationMinutes}M`)}
+                        {formatDuration(`PT${layoverDurationMinutes}M`)}
                       </p>
                     </div>
                   </div>

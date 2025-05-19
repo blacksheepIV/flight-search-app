@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Montserrat } from 'next/font/google'
 import './globals.css'
+import 'rc-slider/assets/index.css'
 import { ReactQueryProvider } from '@/app/context/ReactQueryProvider'
 
 const inter = Inter({

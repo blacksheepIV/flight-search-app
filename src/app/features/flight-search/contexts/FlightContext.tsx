@@ -41,27 +41,34 @@ interface FlightContextValue {
   setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions>>
   sortOption: string
   setSortOption: (val: string) => void
+  reset: () => void
 }
 
 const FlightContext = createContext<FlightContextValue | undefined>(undefined)
 
+const defaultSearchParams: SearchParams = {
+  origin: null,
+  destination: null,
+  departureDate: '',
+  returnDate: '',
+  isRoundTrip: true,
+  passengers: 1,
+}
+
+const defaultFilterOptions: FilterOptions = {
+  priceRange: [0, 1000],
+  departureWindow: [0, 23],
+}
+
 export function FlightSearchProvider({ children }: { children: ReactNode }) {
   const [results, setResults] = useState<Flight[]>([])
-  const [filteredFlights, setFilteredFlights] = useState<Flight[]>([])
+  const [filteredFlights, setFilteredFlights] = useState<Flight[]>([...results])
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
-  const [searchParams, setSearchParams] = useState<SearchParams>({
-    origin: null,
-    destination: null,
-    departureDate: '',
-    returnDate: '',
-    isRoundTrip: true,
-    passengers: 1,
-  })
-  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
-    priceRange: [0, 1000],
-    departureWindow: [0, 23],
-  })
+  const [searchParams, setSearchParams] =
+    useState<SearchParams>(defaultSearchParams)
+  const [filterOptions, setFilterOptions] =
+    useState<FilterOptions>(defaultFilterOptions)
 
   const [sortOption, setSortOption] = useState('')
 
@@ -73,6 +80,16 @@ export function FlightSearchProvider({ children }: { children: ReactNode }) {
       setFilteredFlights(sorted)
     }
   }, [results, filterOptions, sortOption])
+
+  const reset = () => {
+    setResults([])
+    setFilteredFlights([])
+    setSortOption('')
+    setFilterOptions(defaultFilterOptions)
+    setSearchParams(defaultSearchParams)
+    setHasSearched(false)
+    setIsLoading(false)
+  }
 
   return (
     <FlightContext.Provider
@@ -91,6 +108,7 @@ export function FlightSearchProvider({ children }: { children: ReactNode }) {
         setFilterOptions,
         sortOption,
         setSortOption,
+        reset,
       }}
     >
       {children}
