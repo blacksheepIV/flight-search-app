@@ -1,4 +1,4 @@
-// src/utils/flightUtils.ts
+import { getHours } from 'date-fns'
 import type { Flight } from '@/app/api/search-flights/types'
 import type { FilterOptions } from '@/app/features/flight-search/contexts/FlightContext'
 
@@ -12,9 +12,8 @@ export function filterFlights(
       totalPrice >= filter.priceRange[0] && totalPrice <= filter.priceRange[1]
 
     const firstSegment = flight.itineraries[0]?.segments[0]
-    const departureTime =
-      new Date(firstSegment?.departure.at || '').getHours() * 60 +
-      new Date(firstSegment?.departure.at || '').getMinutes()
+    const departureTime = getHours(firstSegment?.departure.at || '')
+
     const withinDepartureWindow =
       departureTime >= filter.departureWindow[0] &&
       departureTime <= filter.departureWindow[1]

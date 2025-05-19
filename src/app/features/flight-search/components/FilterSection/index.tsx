@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react'
+import { setHours, startOfDay, format } from 'date-fns'
 import {
   FunnelIcon,
   ChevronDownIcon,
@@ -57,12 +58,9 @@ const FilterSection: React.FC = () => {
     setSortOption(value)
   }
 
-  const formatTime = (minutes: number) => {
-    const hrs = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    return `${hrs.toString().padStart(2, '0')}:${mins
-      .toString()
-      .padStart(2, '0')}`
+  const formatHour = (hour: number): string => {
+    const date = setHours(startOfDay(new Date()), hour)
+    return format(date, 'HH:mm')
   }
 
   const formatPrice = (price: number) => `$${price}`
@@ -153,8 +151,8 @@ const FilterSection: React.FC = () => {
             <h3 className="font-medium mb-3">Departure Time Window</h3>
             <div className="space-y-2">
               <div className="flex justify-between text-sm text-gray-600">
-                <span>{formatTime(filterOptions.departureWindow[0])}</span>
-                <span>{formatTime(filterOptions.departureWindow[1])}</span>
+                <span>{formatHour(filterOptions.departureWindow[0])}</span>
+                <span>{formatHour(filterOptions.departureWindow[1])}</span>
               </div>
               <input
                 type="range"

@@ -47,7 +47,7 @@ const FlightContext = createContext<FlightContextValue | undefined>(undefined)
 
 export function FlightSearchProvider({ children }: { children: ReactNode }) {
   const [results, setResults] = useState<Flight[]>([])
-  const [filteredFlights, setFilteredFlights] = useState<Flight[]>([])
+  const [filteredFlights, setFilteredFlights] = useState<Flight[]>([...results])
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
   const [searchParams, setSearchParams] = useState<SearchParams>({

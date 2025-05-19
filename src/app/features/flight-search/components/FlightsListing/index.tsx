@@ -10,7 +10,8 @@ import {
 import FilterSection from '../FilterSection'
 
 const FlightsListing: React.FC = () => {
-  const { results, isLoading, hasSearched, searchParams } = useFlightsInfo() //TODO: should load from filteredFlights
+  const { isLoading, hasSearched, searchParams, filteredFlights } =
+    useFlightsInfo() //TODO: should load from filteredFlights
 
   if (isLoading) {
     return (
@@ -36,7 +37,7 @@ const FlightsListing: React.FC = () => {
     return null
   }
 
-  if (results.length === 0) {
+  if (filteredFlights.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-lg p-8 text-center">
         <ExclamationCircleIcon className="mx-auto text-orange-500 mb-4 w-[48px] h-[48px]" />
@@ -73,7 +74,8 @@ const FlightsListing: React.FC = () => {
           </div>
         </div>
         <div className="text-sm text-gray-600">
-          {results.length} {results.length === 1 ? 'flight' : 'flights'} found
+          {filteredFlights.length}{' '}
+          {filteredFlights.length === 1 ? 'flight' : 'flights'} found
           {searchParams.passengers > 1 && (
             <span> · {searchParams.passengers} passengers</span>
           )}
@@ -85,7 +87,7 @@ const FlightsListing: React.FC = () => {
 
       {/* Flight list */}
       <div className="space-y-4">
-        {results.map(flight => (
+        {filteredFlights.map(flight => (
           <FlightCard key={flight.id} flight={flight} />
         ))}
       </div>
