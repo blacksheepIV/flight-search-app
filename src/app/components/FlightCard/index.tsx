@@ -35,7 +35,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
           {/* Airline */}
           <div className="flex items-center mb-4 md:mb-0">
             {/* Airline logo missing in API response */}
-            <div className="w-[50px] h-[50px]  mr-3">
+            <div className="w-[100px] h-[30px]  mr-3">
               <Image
                 src={`https://content.airhex.com/content/logos/airlines_${flight.validatingAirlineCodes[0]}_350_100_r.png`}
                 alt={flight.validatingAirlineCodes[0]}
