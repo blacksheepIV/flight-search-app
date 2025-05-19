@@ -61,6 +61,8 @@ const FlightSearchPanel: React.FC = () => {
     if (Array.isArray(data.departureDate) && isRoundTrip) {
       departureDate = format(data.departureDate[0], 'yyyy-MM-dd')
       returnDate = format(data.departureDate[1], 'yyyy-MM-dd')
+    } else {
+      departureDate = format(data.departureDate, 'yyyy-MM-dd')
     }
 
     const formattedData: FlightSearchParams = {
@@ -89,7 +91,7 @@ const FlightSearchPanel: React.FC = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 max-w-5xl">
+    <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 w-full  max-w-5xl h-[400px] max-h-[400px]">
       <div className="flex items-center justify-between mb-6">
         <div className="flex space-x-4">
           <button
@@ -119,10 +121,13 @@ const FlightSearchPanel: React.FC = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end mb-6 md:h-[80px] max-h[80px]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full md:h-[256px] md:max-h-[256px]"
+      >
+        <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-4 items-end mb-6 md:h-[80px] max-h[80px]">
           {/* Origin */}
-          <div className="md:col-span-5 relative self-end">
+          <div className="md:col-span-5 relative self-end md:h-full md:w-[250px]">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               From
             </label>
@@ -144,7 +149,7 @@ const FlightSearchPanel: React.FC = () => {
           </div>
 
           {/* Swap button */}
-          <div className="md:col-span-2 flex items-center justify-center self-end">
+          <div className="md:col-span-2 flex items-center justify-center self-end  md:h-full">
             <button
               type="button"
               disabled={isSwapDisabled}
@@ -173,7 +178,7 @@ const FlightSearchPanel: React.FC = () => {
           </div>
 
           {/* Destination */}
-          <div className="md:col-span-5 relative self-end">
+          <div className="md:col-span-5 relative self-end  md:h-full md:w-[250px]">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               To
             </label>
@@ -198,7 +203,7 @@ const FlightSearchPanel: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6 md:h-[80px] max-h[80px]">
+        <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-4 mb-6 md:h-[80px] max-h[80px]">
           {/* Departure Date */}
           <div className="md:col-span-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
