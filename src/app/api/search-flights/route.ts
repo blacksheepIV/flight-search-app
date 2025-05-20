@@ -1,6 +1,6 @@
 import { getAmadeusAccessToken } from '@/app/lib/api/amadeus'
 import { NextResponse } from 'next/server'
-import { GetFlightsResponse } from './types'
+import type { GetFlightsResponse } from './types'
 
 export async function POST(req: Request) {
   const body = await req.json()
