@@ -4,7 +4,7 @@ import './globals.css'
 import 'rc-slider/assets/index.css'
 import Providers from '@/app/context/Providers'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/app/lib/api/auth'
 
 const inter = Inter({
   subsets: ['latin'],
