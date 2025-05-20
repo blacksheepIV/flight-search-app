@@ -268,8 +268,8 @@ const FlightSearchPanel: React.FC = () => {
           type="submit"
           disabled={!isValid}
           className={clsx(
-            `w-full py-3 rounded-lg font-semibold bg-alice_blue-100 text-white`,
-            !isValid ? 'cursor-not-allowed bg-opacity-20' : 'cursor-pointer',
+            `w-full py-3 rounded-lg font-semibold bg-dodger_blue text-white`,
+            !isValid ? 'cursor-not-allowed opacity-80' : 'cursor-pointer',
             { 'cursor-not-allowed': isPending },
           )}
         >

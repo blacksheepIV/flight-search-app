@@ -1,11 +1,15 @@
 'use client'
 
 import clsx from 'clsx'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import React, { useState, useEffect } from 'react'
+import ProfileDropdown from '@/app/components/ProfileDropDown'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
-
+  const router = useRouter()
+  const { data: session } = useSession()
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
@@ -14,6 +18,8 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const isLoggedIn = !!session
 
   return (
     <header
@@ -34,26 +40,31 @@ const Header = () => {
           </h1>
         </div>
 
-        <div className="flex justify-end items-center gap-2">
-          <button
-            className={clsx(
-              'font-normal transition-colors duration-300 text-black bg-sunglow-500 hover:text-white p-1.5 rounded-sm cursor-pointer',
-              { 'bg-white': isScrolled },
-            )}
-          >
-            Register
-          </button>
-          <button
-            className={clsx(
-              'font-normal transition-colors duration-300 p-1.5 rounded-sm text-black bg-white hover:text-dodger_blue-400 cursor-pointer',
-              { 'bg-sunglow-600': isScrolled },
-            )}
-          >
-            signIn
-          </button>
-        </div>
+        {!isLoggedIn ? (
+          <div className="flex justify-end items-center gap-2">
+            <button
+              className={clsx(
+                'font-normal transition-colors duration-300 text-black bg-sunglow-500 hover:text-white p-1.5 rounded-sm cursor-pointer',
+                { 'bg-white': isScrolled },
+              )}
+              onClick={() => router.push('/register')}
+            >
+              Register
+            </button>
+            <button
+              onClick={() => router.push('/sign-in')}
+              className={clsx(
+                'font-normal transition-colors duration-300 p-1.5 rounded-sm text-black bg-white hover:text-dodger_blue-400 cursor-pointer',
+                { 'bg-sunglow-600': isScrolled },
+              )}
+            >
+              signIn
+            </button>
+          </div>
+        ) : (
+          <ProfileDropdown session={session} />
+        )}
       </div>
-      {/* TODO: show profile if user session already exists  */}
     </header>
   )
 }

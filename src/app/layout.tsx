@@ -2,7 +2,9 @@ import type { Metadata } from 'next'
 import { Inter, Montserrat } from 'next/font/google'
 import './globals.css'
 import 'rc-slider/assets/index.css'
-import { ReactQueryProvider } from '@/app/context/ReactQueryProvider'
+import Providers from '@/app/context/Providers'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -33,11 +35,12 @@ export const metadata: Metadata = {
     'Modern flight search app built with Next.js, Tailwind CSS, and NextAuth. Search, filter, and bookmark flights easily.',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await getServerSession(authOptions)
   return (
     <html lang="en">
       <link
@@ -57,7 +60,7 @@ export default function RootLayout({
       <link rel="manifest" href="/site.webmanifest" />
 
       <body className={`${inter.variable} ${montserrat.variable} antialiased`}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <Providers session={session}>{children}</Providers>
       </body>
     </html>
   )

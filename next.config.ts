@@ -3,7 +3,18 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    remotePatterns: [new URL('https://content.airhex.com/content/logos/**')],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'content.airhex.com',
+        pathname: '/content/logos/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        pathname: '/u/**',
+      },
+    ],
   },
 }
 

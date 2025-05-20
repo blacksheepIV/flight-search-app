@@ -73,7 +73,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
               </div>
               <div className="relative w-24 md:w-32">
                 <div className="border-t-2 border-gray-300 absolute w-full top-1/2" />
-                {firstItinerary.segments.length > 2
+                {firstItinerary.segments.length >= 2
                   ? firstItinerary.segments.slice(1, -1).map((_, index) => (
                       <div
                         key={index}
