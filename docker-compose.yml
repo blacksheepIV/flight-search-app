@@ -5,11 +5,11 @@ services:
     build:
       context: .
       args:
-        - NODE_ENV=${NODE_ENV:-development}
+        - NODE_ENV=${NODE_ENV:-production}
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=${NODE_ENV:-development}
+      - NODE_ENV=${NODE_ENV:-production}
       - GITHUB_ID=${GITHUB_ID}
       - GITHUB_SECRET=${GITHUB_SECRET}
       - DB_URL=${DB_URL}
@@ -19,8 +19,7 @@ services:
       - AMADEUS_API_SECRET=${AMADEUS_API_SECRET}
     env_file:
       - ${ENV_FILE:-.env}
-    depends_on:
-      - db
+
 
 
 volumes:
