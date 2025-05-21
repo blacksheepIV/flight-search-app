@@ -1,0 +1,5 @@
+dev:
+	NODE_ENV=development docker-compose --env-file .env.local up --build
+
+prod:
+	NODE_ENV=production docker-compose --env-file .env up --build
