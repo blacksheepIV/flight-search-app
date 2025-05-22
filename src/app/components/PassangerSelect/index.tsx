@@ -51,9 +51,31 @@ const PassangersSelect = ({ value, onChange }: PassengerSelectProps) => {
             ...base,
             paddingLeft: '1.25rem',
           }),
-          option: (base, state) => ({
+          option: (base, state) => {
+            let backgroundColor = '#ffffff'
+            let color = '#171717'
+
+            if (state.isSelected && state.isFocused) {
+              backgroundColor = '#2499ff'
+              color = '#ffffff'
+            } else if (state.isSelected) {
+              backgroundColor = '#2499ff'
+              color = '#171717'
+            } else if (state.isFocused) {
+              backgroundColor = '#85c6ff'
+              color = '#ffffff'
+            }
+
+            return {
+              ...base,
+              backgroundColor,
+              color,
+            }
+          },
+          control: (base, state) => ({
             ...base,
-            color: state.isSelected ? '#118ff8' : '#333333',
+            borderRadius: '8px',
+            borderColor: state.isFocused ? '#2499ff' : '#E5E5E5',
           }),
         }}
       />

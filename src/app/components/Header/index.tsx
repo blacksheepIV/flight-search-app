@@ -3,38 +3,27 @@
 import clsx from 'clsx'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import ProfileDropdown from '@/app/components/ProfileDropDown'
+import Image from 'next/image'
 
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false)
   const router = useRouter()
   const { data: session } = useSession()
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   const isLoggedIn = !!session
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white shadow-md py-2'
-          : 'bg-gradient-to-r from-dodger_blue-500 to-dodger_blue-600 py-4'
-      }`}
+      className={
+        'sticky top-0 z-50 w-full transition-all duration-300 bg-white shadow-md py-4'
+      }
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         <div className="flex items-center gap-2 cursor-pointer">
+          <Image src="/logo.png" alt="logo" width={40} height={40} />
           <h1
-            className={`text-xl font-bold ${
-              isScrolled ? 'text-dodger_blue-500' : 'text-white'
-            } transition-colors duration-300`}
+            className={`text-xl font-bold  tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-dodger_blue to-[#111cf8]`}
           >
             SkySearch
           </h1>
@@ -43,22 +32,21 @@ const Header = () => {
         {!isLoggedIn ? (
           <div className="flex justify-end items-center gap-2">
             <button
+              onClick={() => router.push('/sign-in')}
               className={clsx(
-                'font-normal transition-colors duration-300 text-black bg-sunglow-500 hover:text-white p-1.5 rounded-sm cursor-pointer',
-                { 'bg-white': isScrolled },
+                'font-normal transition-colors duration-300 py-1 px-2 rounded-md text-black bg-white border border-border hover:bg-secondary hover:text-secondary-foreground cursor-pointer',
+              )}
+            >
+              signIn
+            </button>
+
+            <button
+              className={clsx(
+                'font-normal transition-colors duration-300 text-primary bg-sunglow  hover:opacity-90 py-1 px-2 rounded-md cursor-pointer',
               )}
               onClick={() => router.push('/register')}
             >
               Register
-            </button>
-            <button
-              onClick={() => router.push('/sign-in')}
-              className={clsx(
-                'font-normal transition-colors duration-300 p-1.5 rounded-sm text-black bg-white hover:text-dodger_blue-400 cursor-pointer',
-                { 'bg-sunglow-600': isScrolled },
-              )}
-            >
-              signIn
             </button>
           </div>
         ) : (

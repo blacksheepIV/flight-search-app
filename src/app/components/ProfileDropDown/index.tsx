@@ -52,7 +52,7 @@ const ProfileDropdown: React.FC<Props> = ({ session }) => {
             <li>
               <a
                 href="/bookmarks"
-                className="block px-4 py-2 text-sm hover:bg-gray-100"
+                className="block px-4 py-2 text-sm hover:bg-alice_blue-800"
               >
                 Bookmarks
               </a>
@@ -60,7 +60,7 @@ const ProfileDropdown: React.FC<Props> = ({ session }) => {
             <li>
               <a
                 href="/searches"
-                className="block px-4 py-2 text-sm hover:bg-gray-100"
+                className="block px-4 py-2 text-sm hover:bg-alice_blue-800"
               >
                 Saved Searches
               </a>
@@ -68,7 +68,7 @@ const ProfileDropdown: React.FC<Props> = ({ session }) => {
             <li>
               <button
                 onClick={() => signOut()}
-                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                className="w-full text-left px-4 py-2 text-sm hover:bg-alice_blue-800"
               >
                 Sign out
               </button>

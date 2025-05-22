@@ -100,16 +100,16 @@ const FlightSearchPanel: React.FC = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 w-full  max-w-5xl h-[400px] max-h-[400px]">
+    <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 w-full max-w-5xl lg:h-[400px] max-h-[550px]">
       <div className="flex items-center justify-between mb-6">
         <div className="flex space-x-4">
           <button
             type="button"
             className={clsx(
-              'px-4 py-2 rounded-full font-medium transition-colors duration-200',
+              'px-4 py-2 rounded-full font-medium transition-colors duration-200 cursor-pointer',
               isRoundTrip
-                ? 'bg-dodger_blue-600 text-white'
-                : 'border-2 border-dodger_blue-600 text-black',
+                ? 'bg-dodger_blue-600 text-white hover:opacity-85'
+                : 'border-1 border-border text-primary',
             )}
             onClick={() => setIsRoundTrip(true)}
           >
@@ -118,10 +118,10 @@ const FlightSearchPanel: React.FC = () => {
           <button
             type="button"
             className={clsx(
-              'px-4 py-2 rounded-full font-medium transition-colors duration-200',
+              'px-4 py-2 rounded-full font-medium transition-colors duration-200 cursor-pointer',
               !isRoundTrip
-                ? 'bg-dodger_blue-600 text-white'
-                : 'border-2 border-dodger_blue-600 text-black',
+                ? 'bg-dodger_blue-600 text-white hover:opacity-85'
+                : 'border-1 border-border text-primary',
             )}
             onClick={() => setIsRoundTrip(false)}
           >
@@ -134,7 +134,7 @@ const FlightSearchPanel: React.FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="w-full md:h-[256px] md:max-h-[256px]"
       >
-        <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-4 items-end mb-6 md:h-[80px] max-h[80px]">
+        <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-6 md:h-[80px] max-h[80px]">
           {/* Origin */}
           <div className="md:col-span-5 relative self-end md:h-full md:w-[250px]">
             <label className="block text-sm font-medium text-gray-700 mb-1">
