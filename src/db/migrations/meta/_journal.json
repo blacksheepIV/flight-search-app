@@ -8,6 +8,20 @@
       "when": 1747247771144,
       "tag": "0000_freezing_nitro",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1747950933242,
+      "tag": "0001_magenta_meltdown",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1747951195040,
+      "tag": "0002_hesitant_wrecker",
+      "breakpoints": true
     }
   ]
 }

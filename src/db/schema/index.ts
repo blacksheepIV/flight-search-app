@@ -1,3 +1,5 @@
 export * from './user'
 export * from './account'
 export * from './session'
+export * from './bookmarked_flights'
+export * from './saved_searches'
