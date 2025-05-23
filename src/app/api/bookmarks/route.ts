@@ -36,13 +36,20 @@ export async function POST(req: Request) {
   }
 
   const data = parsed.data
+  try {
+    await db.insert(bookmarkedFlights).values({
+      userId: session.user.id,
+      ...data,
+      departureTime: new Date(data.departureTime),
+      arrivalTime: new Date(data.arrivalTime),
+    })
 
-  await db.insert(bookmarkedFlights).values({
-    userId: session.user.id,
-    ...data,
-    departureTime: new Date(data.departureTime),
-    arrivalTime: new Date(data.arrivalTime),
-  })
-
-  return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Failed to insert bookmarked flight:', error)
+    return NextResponse.json(
+      { error: 'Something went wrong saving your bookmark.' },
+      { status: 500 },
+    )
+  }
 }
