@@ -7,8 +7,8 @@ import type { FlightSearchForm } from './types'
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import LocationInput from '@/app/components/LocationInput'
 import clsx from 'clsx'
-import DatePicker from '@/app/components/DatePicker'
-import PassangersSelect from '@/app/components/PassangerSelect'
+import DatePicker from '@/app/features/flight-search/components/DatePicker'
+import PassangersSelect from '@/app/features/flight-search/components/PassangerSelect'
 import { useFlightsMutation } from '@/app/hooks/api/useFlightsSearch'
 import { format } from 'date-fns'
 import { FlightSearchParams } from '@/app/lib/api/searchFlights'
@@ -100,7 +100,7 @@ const FlightSearchPanel: React.FC = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 w-full max-w-5xl lg:h-[400px] max-h-[550px]">
+    <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 w-full  lg:h-[400px] max-h-[550px]">
       <div className="flex items-center justify-between mb-6">
         <div className="flex space-x-4">
           <button

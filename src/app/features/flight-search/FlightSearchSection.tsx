@@ -8,7 +8,7 @@ import FlightSearchPanel from './components/FlightSearchPanel'
 const FlightSearchSection: React.FC = () => {
   return (
     <FlightSearchProvider>
-      <section className="space-y-8">
+      <section className="space-y-8 max-w-5x">
         <FlightSearchPanel />
         <FlightsListing />
       </section>

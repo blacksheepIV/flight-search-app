@@ -11,7 +11,7 @@ import type { Flight } from '@/app/api/search-flights/types'
 import { format } from 'date-fns'
 
 import { formatDuration } from '@/app/utils/timeUtils'
-import AirlineLogo from '@/app/components/AirlineLogo'
+import AirlineLogo from '@/app/features/flight-search/components/AirlineLogo'
 
 interface FlightCardProps {
   flight: Flight
