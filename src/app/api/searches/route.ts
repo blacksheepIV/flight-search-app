@@ -6,6 +6,7 @@ import { savedSearches } from '@/db/schema'
 import { z } from 'zod'
 
 const searchSchema = z.object({
+  name: z.string().min(3),
   originIata: z.string(),
   originCity: z.string(),
   destinationIata: z.string(),

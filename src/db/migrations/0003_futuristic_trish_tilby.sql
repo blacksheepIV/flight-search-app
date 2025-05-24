@@ -1,0 +1,1 @@
+ALTER TABLE "saved_searches" ADD COLUMN "name" text NOT NULL;

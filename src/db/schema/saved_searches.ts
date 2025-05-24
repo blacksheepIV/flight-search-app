@@ -14,7 +14,7 @@ export const savedSearches = pgTable('saved_searches', {
   userId: text('user_id')
     .notNull()
     .references(() => users.id),
-
+  name: text('name').notNull(),
   originIata: text('origin_iata').notNull(),
   originCity: text('origin_city').notNull(),
 
