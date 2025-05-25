@@ -6,12 +6,12 @@ import { parseSearchParams } from './utils/parseSearchParams'
 import { getLocationByIata } from '@/app/lib/api/location-service'
 
 interface PageSearchParams {
-  searchParams: SearchParamsType
+  searchParams: Promise<SearchParamsType>
 }
 
 export default async function Home({ searchParams }: PageSearchParams) {
-  const params = await searchParams
-  const parsed = parseSearchParams(params)
+  const resolvedParams = await searchParams
+  const parsed = parseSearchParams(resolvedParams)
 
   const [origin, destination] = await Promise.all([
     parsed?.origin ? getLocationByIata(parsed.origin) : null,
