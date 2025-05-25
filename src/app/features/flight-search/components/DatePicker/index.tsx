@@ -4,15 +4,17 @@ import { CalendarDateRangeIcon } from '@heroicons/react/24/outline'
 import 'react-calendar/dist/Calendar.css'
 import './datePicker.css'
 
-type ValuePiece = Date | null
+export type CalendarValue = Date | null
 
-type Value = ValuePiece | [ValuePiece, ValuePiece]
+type Value = CalendarValue | [CalendarValue, CalendarValue]
+
+export type DatePickerValue = Value
 
 interface Props {
   showRange?: boolean
   disablePast?: boolean
   onChange?: (value: Value) => void
-  value?: ValuePiece
+  value: Value
 }
 
 function DatePicker({

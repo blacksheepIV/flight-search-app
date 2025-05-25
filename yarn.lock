@@ -1048,6 +1048,13 @@
     pg-protocol "*"
     pg-types "^4.0.1"
 
+"@types/react-calendar@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-calendar/-/react-calendar-4.1.0.tgz#8b189667f2827adfa299c1ef7037ca81e1036d40"
+  integrity sha512-CZL0+bOJ43+ZxnScd6n6SbA3RvoT/FurMIKevvTnRhLdncTRO7LyvBaFu3Bmwoad8ApVBJsMyAiPO79vGWRbbA==
+  dependencies:
+    react-calendar "*"
+
 "@types/react-dom@^19":
   version "19.1.5"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-19.1.5.tgz#cdfe2c663742887372f54804b16e8dbc26bd794a"
@@ -3312,7 +3319,7 @@ rc-util@^5.36.0:
     "@babel/runtime" "^7.18.3"
     react-is "^18.2.0"
 
-react-calendar@^5.1.0:
+react-calendar@*, react-calendar@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/react-calendar/-/react-calendar-5.1.0.tgz#f5d3342a872cbb8907099ca5651bc936046033b8"
   integrity sha512-09o/rQHPZGEi658IXAJtWfra1N69D1eFnuJ3FQm9qUVzlzNnos1+GWgGiUeSs22QOpNm32aoVFOimq0p3Ug9Eg==

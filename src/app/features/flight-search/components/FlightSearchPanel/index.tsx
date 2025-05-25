@@ -1,8 +1,10 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+
+import { useRouter } from 'next/navigation'
 import { useForm, Controller, useWatch } from 'react-hook-form'
 
-import type { FlightSearchForm } from './types'
+import { type FlightSearchForm, isDateRange, isSingleDate } from './types'
 
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import LocationInput from '@/app/features/flight-search/components/LocationInput'
@@ -10,13 +12,17 @@ import clsx from 'clsx'
 import DatePicker from '@/app/features/flight-search/components/DatePicker'
 import PassangersSelect from '@/app/features/flight-search/components/PassangerSelect'
 import { useFlightsMutation } from '@/app/hooks/api/useFlightsSearch'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { FlightSearchParams } from '@/app/lib/api/searchFlights'
 import { useFlightsInfo } from '@/app/features/flight-search/contexts/FlightContext'
+import type { DatePickerValue } from '@/app/features/flight-search/components/DatePicker'
 
 const FlightSearchPanel: React.FC = () => {
+  const router = useRouter()
+
   const [isRoundTrip, setIsRoundTrip] = useState(true)
   const {
+    searchParams,
     setResults,
     setIsLoading,
     setHasSearched,
@@ -47,8 +53,7 @@ const FlightSearchPanel: React.FC = () => {
     formState: { errors, isValid },
   } = useForm<FlightSearchForm>({
     defaultValues: {
-      departureDate: new Date(),
-      returnDate: new Date(),
+      departureDate: new Date() as DatePickerValue,
       passengers: 1,
     },
     mode: 'onChange',
@@ -59,38 +64,112 @@ const FlightSearchPanel: React.FC = () => {
 
   const isSwapDisabled = !originQuery || !destinationQuery
 
-  const onSubmit = (data: FlightSearchForm) => {
-    if (results.length > 0) {
-      reset()
-    }
-    setIsLoading(true)
+  const formatSearchParams = (
+    data: FlightSearchForm,
+    isRoundTrip: boolean,
+  ): {
+    query: URLSearchParams
+    apiParams: FlightSearchParams
+    contextParams: typeof searchParams
+  } | null => {
     let departureDate: string | null = null
     let returnDate: string | null = null
 
-    if (Array.isArray(data.departureDate) && isRoundTrip) {
-      departureDate = format(data.departureDate[0], 'yyyy-MM-dd')
-      returnDate = format(data.departureDate[1], 'yyyy-MM-dd')
-    } else {
+    if (isDateRange(data.departureDate) && isRoundTrip) {
+      const [start, end] = data.departureDate
+      if (start) departureDate = format(start, 'yyyy-MM-dd')
+      if (end) returnDate = format(end, 'yyyy-MM-dd')
+    } else if (isSingleDate(data.departureDate)) {
       departureDate = format(data.departureDate, 'yyyy-MM-dd')
     }
 
-    const formattedData: FlightSearchParams = {
+    if (!departureDate) return null
+
+    const apiParams: FlightSearchParams = {
       origin: data.originQuery.iataCode,
       destination: data.destinationQuery.iataCode,
       adults: data.passengers,
-      departureDate: departureDate as string,
+      departureDate,
       ...(returnDate && { returnDate }),
     }
-    setSearchParams({
+
+    const contextParams = {
       isRoundTrip,
       origin: data.originQuery,
       destination: data.destinationQuery,
       passengers: data.passengers,
-      departureDate: departureDate as string,
+      departureDate,
       ...(returnDate && { returnDate }),
+    }
+
+    const query = new URLSearchParams({
+      origin: data.originQuery.iataCode,
+      destination: data.destinationQuery.iataCode,
+      departureDate,
+      passengers: String(data.passengers),
+      isRoundTrip: String(isRoundTrip),
     })
-    lookUpFlights(formattedData)
+    if (returnDate) query.set('returnDate', returnDate)
+
+    return { apiParams, contextParams, query }
   }
+
+  const performSearch = (apiParams: FlightSearchParams) => {
+    setIsLoading(true)
+    lookUpFlights(apiParams)
+  }
+
+  const onSubmit = (data: FlightSearchForm) => {
+    if (results.length > 0) reset()
+
+    const formatted = formatSearchParams(data, isRoundTrip)
+    if (!formatted) {
+      setIsLoading(false)
+      return
+    }
+
+    const { apiParams, contextParams, query } = formatted
+
+    setSearchParams(contextParams)
+    router.push(`/?${query.toString()}`)
+    performSearch(apiParams)
+  }
+
+  useEffect(() => {
+    if (!searchParams) return
+
+    if (searchParams.origin) {
+      setValue('originQuery', searchParams.origin)
+    }
+    if (searchParams.destination) {
+      setValue('destinationQuery', searchParams.destination)
+    }
+
+    if (searchParams.departureDate) {
+      const dep = parseISO(searchParams.departureDate)
+      if (searchParams.returnDate) {
+        const ret = parseISO(searchParams.returnDate)
+        setValue('departureDate', [dep, ret] as DatePickerValue)
+      } else {
+        setValue('departureDate', dep as DatePickerValue)
+      }
+    }
+
+    if (searchParams.passengers) {
+      setValue('passengers', searchParams.passengers)
+    }
+
+    setIsRoundTrip(searchParams.isRoundTrip ?? true)
+
+    setTimeout(() => {
+      const values = getValues()
+      const formatted = formatSearchParams(
+        values,
+        searchParams.isRoundTrip ?? true,
+      )
+      if (formatted) performSearch(formatted.apiParams)
+    }, 50)
+  }, [searchParams, setValue])
 
   const swapLocations = () => {
     const origin = getValues('originQuery')
@@ -227,6 +306,7 @@ const FlightSearchPanel: React.FC = () => {
                   showRange={isRoundTrip}
                   disablePast
                   onChange={field.onChange}
+                  value={field.value}
                 />
               )}
             />

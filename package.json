@@ -33,6 +33,7 @@
     "@types/node": "^20",
     "@types/pg": "^8.15.1",
     "@types/react": "^19",
+    "@types/react-calendar": "^4.1.0",
     "@types/react-dom": "^19",
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.31.1",
