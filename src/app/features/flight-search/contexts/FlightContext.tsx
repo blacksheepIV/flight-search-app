@@ -8,13 +8,13 @@ import React, {
 } from 'react'
 import type { Flight } from '@/app/api/search-flights/types.ts'
 
-import { Location } from '@/app/api/locations/types'
+import { ModifiedLocationsResponse } from '@/app/api/locations/types'
 
 import { sortFlights, filterFlights } from '@/app/utils/flightUtils'
 
 interface SearchParams {
-  origin: Location | null
-  destination: Location | null
+  origin: ModifiedLocationsResponse | null
+  destination: ModifiedLocationsResponse | null
   departureDate: string
   returnDate?: string
   isRoundTrip: boolean
@@ -46,21 +46,26 @@ interface FlightContextValue {
 
 const FlightContext = createContext<FlightContextValue | undefined>(undefined)
 
-const defaultSearchParams: SearchParams = {
-  origin: null,
-  destination: null,
-  departureDate: '',
-  returnDate: '',
-  isRoundTrip: true,
-  passengers: 1,
-}
-
 const defaultFilterOptions: FilterOptions = {
   priceRange: [0, 1000],
   departureWindow: [0, 23],
 }
 
-export function FlightSearchProvider({ children }: { children: ReactNode }) {
+export function FlightSearchProvider({
+  children,
+  initialParams = {},
+}: {
+  children: ReactNode
+  initialParams?: Partial<SearchParams>
+}) {
+  const defaultSearchParams: SearchParams = {
+    origin: initialParams.origin || null,
+    destination: initialParams.destination || null,
+    departureDate: initialParams.departureDate || '',
+    returnDate: initialParams.returnDate || '',
+    isRoundTrip: initialParams.isRoundTrip || false,
+    passengers: initialParams.passengers || 1,
+  }
   const [results, setResults] = useState<Flight[]>([])
   const [filteredFlights, setFilteredFlights] = useState<Flight[]>([...results])
   const [isLoading, setIsLoading] = useState(false)

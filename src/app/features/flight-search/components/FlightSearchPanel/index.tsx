@@ -5,7 +5,7 @@ import { useForm, Controller, useWatch } from 'react-hook-form'
 import type { FlightSearchForm } from './types'
 
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
-import LocationInput from '@/app/components/LocationInput'
+import LocationInput from '@/app/features/flight-search/components/LocationInput'
 import clsx from 'clsx'
 import DatePicker from '@/app/features/flight-search/components/DatePicker'
 import PassangersSelect from '@/app/features/flight-search/components/PassangerSelect'

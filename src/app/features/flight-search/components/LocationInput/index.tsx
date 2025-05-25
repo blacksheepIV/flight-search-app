@@ -1,25 +1,33 @@
 'use client'
 import AsyncSelect from 'react-select/async'
 import { components, type ControlProps } from 'react-select'
-import type { Location } from '@/app/api/locations/types'
-import { getLocations } from '@/app/lib/api/getLocations'
+import type { ModifiedLocationsResponse } from '@/app/api/locations/types'
+
 import { MapPinIcon } from '@heroicons/react/24/outline'
 
 interface Props {
-  value: Location | null
-  onChange: (Location: Location | null) => void
+  value: ModifiedLocationsResponse | null
+  onChange: (Location: ModifiedLocationsResponse | null) => void
 }
-interface LocationOption extends Location {
+interface LocationOption extends ModifiedLocationsResponse {
   label: string
   value: string
+}
+
+const getLocations = async (
+  query: string,
+): Promise<ModifiedLocationsResponse[]> => {
+  const res = await fetch(`/api/locations?keyword=${query}`)
+  if (!res.ok) throw new Error('Failed to fetch locations')
+  return res.json()
 }
 
 const LocationInput = ({ value, onChange }: Props) => {
   const loadOptions = async (inputValue: string): Promise<LocationOption[]> => {
     if (!inputValue) return []
-    const data = await getLocations(inputValue)
+    const data = await getLocations(inputValue.toUpperCase())
 
-    return data.map((location: Location) => ({
+    return data.map((location: ModifiedLocationsResponse) => ({
       ...location,
       label: `${location.name}-(${location.iataCode})`,
       value: location.iataCode,

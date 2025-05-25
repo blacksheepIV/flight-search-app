@@ -1,4 +1,4 @@
-import { getAmadeusAccessToken } from '@/app/lib/api/amadeus'
+import { getAmadeusAccessToken } from '@/app/lib/api/amadeus/tokens'
 import { NextResponse } from 'next/server'
 import type { GetFlightsResponse } from './types'
 

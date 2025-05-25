@@ -44,3 +44,11 @@ export interface Self {
   href: string
   methods: string[]
 }
+
+export interface ModifiedLocationsResponse {
+  id: string
+  name: string
+  iataCode: string
+  country: string
+  subType: string
+}

@@ -1,7 +1,7 @@
-import type { Location } from '@/app/api/locations/types'
+import type { ModifiedLocationsResponse } from '@/app/api/locations/types'
 export interface FlightSearchForm {
-  originQuery: Location
-  destinationQuery: Location
+  originQuery: ModifiedLocationsResponse
+  destinationQuery: ModifiedLocationsResponse
   departureDate: Date
   returnDate: Date
   passengers: number

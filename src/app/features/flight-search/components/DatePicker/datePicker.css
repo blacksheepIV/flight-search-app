@@ -19,7 +19,7 @@
 
 
 .react-calendar__tile--now:not(.react-calendar__tile--active):not(.react-calendar__tile--rangeStart):not(.react-calendar__tile--rangeEnd):not(.react-calendar__tile--rangeBothEnds) {
-  background: inherit !important;
+  background-color: var(--color-sunglow) !important;
   color: inherit !important;
 }
 
