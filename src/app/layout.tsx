@@ -5,6 +5,8 @@ import 'rc-slider/assets/index.css'
 import Providers from '@/app/context/Providers'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/lib/auth'
+import Header from '@/app/components/Header'
+import Footer from '@/app/components/Footer'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -60,7 +62,13 @@ export default async function RootLayout({
       <link rel="manifest" href="/site.webmanifest" />
 
       <body className={`${inter.variable} ${montserrat.variable} antialiased`}>
-        <Providers session={session}>{children}</Providers>
+        <Providers session={session}>
+          <main className="bg-white w-full min-h-screen flex flex-col">
+            <Header />
+            {children}
+            <Footer />
+          </main>
+        </Providers>
       </body>
     </html>
   )
