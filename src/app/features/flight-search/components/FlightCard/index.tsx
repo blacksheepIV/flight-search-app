@@ -34,9 +34,9 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
       <div className="p-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between">
           {/* Airline */}
-          <div className="flex items-center mb-4 md:mb-0">
+          <div className="flex items-center justify-center md:justify-start mb-4 md:mb-0">
             {/* Airline logo missing in API response */}
-            <div className="w-[90px] h-[30px] flex items-center justify-center  mr-3">
+            <div className="w-[90px] h-[30px] flex items-center justify-center mr-3">
               <AirlineLogo
                 iataCode={flight?.validatingAirlineCodes[0]}
                 alt={flight?.validatingAirlineCodes[0] || ''}

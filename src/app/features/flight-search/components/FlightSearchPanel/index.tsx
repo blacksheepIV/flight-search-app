@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useForm, Controller, useWatch } from 'react-hook-form'
 
 import { type FlightSearchForm, isDateRange, isSingleDate } from './types'
-
-import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
+import { ArrowsRightLeftIcon, BookmarkIcon } from '@heroicons/react/24/outline'
+import { BookmarkIcon as FilledBookMark } from '@heroicons/react/24/solid'
 import LocationInput from '@/app/features/flight-search/components/LocationInput'
 import clsx from 'clsx'
 import DatePicker from '@/app/features/flight-search/components/DatePicker'
@@ -16,11 +16,13 @@ import { format, parseISO } from 'date-fns'
 import { FlightSearchParams } from '@/app/lib/api/searchFlights'
 import { useFlightsInfo } from '@/app/features/flight-search/contexts/FlightContext'
 import type { DatePickerValue } from '@/app/features/flight-search/components/DatePicker'
+import toast from 'react-hot-toast'
 
 const FlightSearchPanel: React.FC = () => {
   const router = useRouter()
 
   const [isRoundTrip, setIsRoundTrip] = useState(true)
+  const [savedSearch, setSavedSearch] = useState(false)
   const {
     searchParams,
     setResults,
@@ -50,6 +52,7 @@ const FlightSearchPanel: React.FC = () => {
     control,
     setValue,
     getValues,
+    trigger,
     formState: { errors, isValid },
   } = useForm<FlightSearchForm>({
     defaultValues: {
@@ -160,13 +163,14 @@ const FlightSearchPanel: React.FC = () => {
     }
 
     setIsRoundTrip(searchParams.isRoundTrip ?? true)
-
+    trigger()
     setTimeout(() => {
       const values = getValues()
       const formatted = formatSearchParams(
         values,
         searchParams.isRoundTrip ?? true,
       )
+
       if (formatted) performSearch(formatted.apiParams)
     }, 50)
   }, [searchParams, setValue])
@@ -178,6 +182,55 @@ const FlightSearchPanel: React.FC = () => {
     setValue('destinationQuery', origin)
   }
 
+  const saveSearchFilters = async () => {
+    const values = getValues()
+    const formatted = formatSearchParams(values, isRoundTrip)
+    if (!formatted) {
+      toast.error('Please complete the form before bookmarking.')
+      return
+    }
+
+    const { contextParams } = formatted
+
+    const now = new Date()
+    const bookmarkName = `Search-${now
+      .toISOString()
+      .slice(0, 16)
+      .replace('T', ' ')}`
+
+    const payload = {
+      name: bookmarkName,
+      originIata: contextParams.origin?.iataCode,
+      originCity: contextParams.origin?.name,
+      destinationIata: contextParams.destination?.iataCode,
+      destinationCity: contextParams.destination?.name,
+      departureDate: contextParams.departureDate,
+      returnDate: contextParams?.returnDate ?? undefined,
+      isRoundTrip,
+      passengers: contextParams.passengers,
+    }
+
+    try {
+      const res = await fetch('/api/searches', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (res.ok) {
+        toast.success('Search saved successfully!')
+      } else {
+        const error = await res.json()
+        toast.error(`Failed to save search: ${error.error}`)
+      }
+      setSavedSearch(true)
+      //TODO: Reset "saved" if form values change
+    } catch (err) {
+      console.error('Save search failed:', err)
+      toast.error('Something went wrong while saving your search.')
+    }
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 w-full  lg:h-[400px] max-h-[550px]">
       <div className="flex items-center justify-between mb-6">
@@ -185,7 +238,7 @@ const FlightSearchPanel: React.FC = () => {
           <button
             type="button"
             className={clsx(
-              'px-4 py-2 rounded-full font-medium transition-colors duration-200 cursor-pointer',
+              'px-4 py-2 rounded-full font-medium text-sm md:text-lg transition-colors duration-200 cursor-pointer',
               isRoundTrip
                 ? 'bg-dodger_blue-600 text-white hover:opacity-85'
                 : 'border-1 border-border text-primary',
@@ -197,7 +250,7 @@ const FlightSearchPanel: React.FC = () => {
           <button
             type="button"
             className={clsx(
-              'px-4 py-2 rounded-full font-medium transition-colors duration-200 cursor-pointer',
+              'px-4 py-2 rounded-full font-medium text-sm md:text-lg transition-colors duration-200 cursor-pointer',
               !isRoundTrip
                 ? 'bg-dodger_blue-600 text-white hover:opacity-85'
                 : 'border-1 border-border text-primary',
@@ -207,6 +260,26 @@ const FlightSearchPanel: React.FC = () => {
             One Way
           </button>
         </div>
+        <button
+          type="button"
+          className={clsx(
+            'p-2 rounded-full ',
+            isValid
+              ? 'cursor-pointer transition-colors hover:bg-border hover:text-white'
+              : 'cursor-not-allowed',
+          )}
+          onClick={saveSearchFilters}
+        >
+          {!savedSearch ? (
+            <BookmarkIcon
+              className={clsx('w-[20px] h-[20px]', { 'text-border': !isValid })}
+            />
+          ) : (
+            <FilledBookMark
+              className={clsx('w-[20px] h-[20px]', { 'text-border': !isValid })}
+            />
+          )}
+        </button>
       </div>
 
       <form
