@@ -59,7 +59,7 @@ const ProfileDropdown: React.FC<Props> = ({ session }) => {
             </li>
             <li>
               <a
-                href="/searches"
+                href="/saved-searches"
                 className="block px-4 py-2 text-sm hover:bg-alice_blue-800"
               >
                 Saved Searches
