@@ -10,8 +10,9 @@ import {
 import type { Flight } from '@/app/api/search-flights/types'
 import { format } from 'date-fns'
 
-import { formatDuration } from '@/app/utils/timeUtils'
+import { formatDuration, parseDurationToMinutes } from '@/app/utils/timeUtils'
 import AirlineLogo from '@/app/features/flight-search/components/AirlineLogo'
+import toast from 'react-hot-toast'
 
 interface FlightCardProps {
   flight: Flight
@@ -19,6 +20,8 @@ interface FlightCardProps {
 
 const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
   const [expanded, setExpanded] = useState(false)
+  const [isBookmarked, setIsBookmarked] = useState(false)
+  const [bookmarkLoading, setBookmarkLoading] = useState(false)
 
   const firstItinerary = flight.itineraries[0]
   const firstSegment = firstItinerary.segments[0]
@@ -28,6 +31,43 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
   const formatTime = (date: Date) => format(date, 'hh:mm a')
 
   const formatDate = (date: Date) => format(date, 'MMM d')
+
+  const handleBookmark = async () => {
+    setBookmarkLoading(true)
+
+    const payload = {
+      flightId: flight.id, // or another unique identifier
+      originIata: flight.itineraries[0].segments[0].departure.iataCode,
+      destinationIata: flight.itineraries[0].segments.at(-1)?.arrival.iataCode,
+      departureTime: new Date(firstSegment.departure.at).toISOString(),
+      arrivalTime: new Date(lastSegment.arrival.at).toISOString(),
+      durationMinutes: parseDurationToMinutes(flight.itineraries[0].duration),
+      priceTotal: flight.price.grandTotal,
+      priceCurrency: flight.price.currency,
+      airlineName: flight.validatingAirlineCodes[0],
+      airlineCode: flight.validatingAirlineCodes[0],
+    }
+
+    try {
+      const res = await fetch('/api/bookmarks', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (res.ok) {
+        setIsBookmarked(true)
+      } else {
+        toast.error('Failed to bookmark flight')
+      }
+    } catch (err: unknown) {
+      toast.error(`Error:${err || 'something went wrong'}`)
+    } finally {
+      setBookmarkLoading(false)
+    }
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg mb-4">
@@ -197,11 +237,24 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
                 {flight.validatingAirlineCodes[0]} - Economy
               </p>
               <div className="mt-2 flex space-x-4">
-                <button className="text-blue-600 text-sm font-medium">
+                <button className="text-alice_blue-200 text-sm font-medium">
                   Fare Details
                 </button>
-                <button className="text-blue-600 text-sm font-medium">
+                <button className="text-alice_blue-200 text-sm font-medium">
                   Baggage Information
+                </button>
+                <button
+                  onClick={handleBookmark}
+                  disabled={isBookmarked || bookmarkLoading}
+                  className={`text-sm font-medium ${
+                    isBookmarked ? 'text-green-600' : 'text-alice_blue-200'
+                  }`}
+                >
+                  {isBookmarked
+                    ? 'Bookmarked ✅'
+                    : bookmarkLoading
+                    ? 'Saving...'
+                    : 'Bookmark this flight'}
                 </button>
               </div>
             </div>

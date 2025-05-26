@@ -23,3 +23,8 @@ export const formatDuration = (duration: string): string => {
   if (minutes) return `${minutes}m`
   return '0m'
 }
+
+export const parseDurationToMinutes = (duration: string): number => {
+  const { hours, minutes } = parseISODuration(duration)
+  return hours * 60 + minutes
+}
