@@ -4,6 +4,7 @@ import { db } from '@/db'
 import { bookmarkedFlights } from '@/db/schema'
 import { z } from 'zod'
 import { authOptions } from '@/app/lib/auth'
+import { eq } from 'drizzle-orm'
 
 const flightSchema = z.object({
   flightId: z.string(),
@@ -49,6 +50,31 @@ export async function POST(req: Request) {
     console.error('Failed to insert bookmarked flight:', error)
     return NextResponse.json(
       { error: 'Something went wrong saving your bookmark.' },
+      { status: 500 },
+    )
+  }
+}
+
+/**
+ * @description GET API to fetch all bookmarked flights for the current user
+ */
+export async function GET() {
+  const session = await getServerSession(authOptions)
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  try {
+    const bookmarks = await db
+      .select()
+      .from(bookmarkedFlights)
+      .where(eq(bookmarkedFlights.userId, session.user.id))
+
+    return NextResponse.json({ bookmarks })
+  } catch (error) {
+    console.error('Failed to fetch bookmarked flights:', error)
+    return NextResponse.json(
+      { error: 'Something went wrong fetching your bookmarks.' },
       { status: 500 },
     )
   }

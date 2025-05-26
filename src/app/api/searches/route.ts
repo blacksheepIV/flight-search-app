@@ -4,6 +4,7 @@ import { authOptions } from '@/app/lib/auth'
 import { db } from '@/db'
 import { savedSearches } from '@/db/schema'
 import { z } from 'zod'
+import { eq } from 'drizzle-orm'
 
 const searchSchema = z.object({
   name: z.string().min(3),
@@ -44,6 +45,28 @@ export async function POST(req: Request) {
     console.error('Failed to insert saved search:', error)
     return NextResponse.json(
       { error: 'Something went wrong saving your search.' },
+      { status: 500 },
+    )
+  }
+}
+
+export async function GET() {
+  const session = await getServerSession(authOptions)
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  try {
+    const bookmarks = await db
+      .select()
+      .from(savedSearches)
+      .where(eq(savedSearches.userId, session.user.id))
+
+    return NextResponse.json({ bookmarks })
+  } catch (error) {
+    console.error('Failed to fetch bookmarked flights:', error)
+    return NextResponse.json(
+      { error: 'Something went wrong fetching your bookmarks.' },
       { status: 500 },
     )
   }
