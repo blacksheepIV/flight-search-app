@@ -16,7 +16,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
-    "next": "15.3.2",
+    "next": "15.3.8",
     "next-auth": "^4.24.11",
     "postgres": "^3.4.5",
     "rc-slider": "^11.1.8",
